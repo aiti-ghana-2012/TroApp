@@ -1,0 +1,10 @@
+The group has covered:
+			All the models and fields.
+			The admin page is complete
+			Urls has been linked to the three view functions
+			Dummy data has been supplied to the database.
+
+Next to do...
+			Work and test around the search algorithm
+			get real data for realworld testing
+			

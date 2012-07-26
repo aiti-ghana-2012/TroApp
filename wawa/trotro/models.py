@@ -10,21 +10,22 @@ class Station(models.Model):
     # help_text=_("Please click on the marker.")
     
     def __unicode__(self):
-        return self.name
+        return self.name 
 
 
 class Route(models.Model):
     fare = models.IntegerField()
-    destination = models.ForeignKey(Station, related_name='destination')
+    departure = models.ForeignKey(Station, related_name='destination')
     arrival = models.ForeignKey(Station, related_name='arrival')
+    total_distance = models.FloatField(default = 0)
 
     def __unicode__(self):
-        router = str(self.destination) + ' - ' + str(self.arrival)
+        router = str(self.departure) + ' - ' + str(self.arrival)
         return router 
 
 class Stop(models.Model):
     name = models.CharField(max_length=200)
-    location = models.CharField(max_length=50, default= '')
+    gpsLocation = models.CharField(max_length=50, default= '')
     
 
     def __unicode__(self):
@@ -32,20 +33,24 @@ class Stop(models.Model):
 
     
 class Route_stop(models.Model):
-    route = models.ForeignKey(Route)
+    route = models.ForeignKey(Route, related_name='stops')
     stop = models.ForeignKey(Stop)
     order = models.IntegerField()
+    accumulated_distance=models.FloatField( default = 0)
+    
 
     def __unicode__(self):
-        RouteStop =str(self.route) + 'the stop'
+        RouteStop =str(self.route) + ' [' + str(self.stop) + ']'
         return RouteStop
-    
+
+    def __getitem__(self, key):
+        return self.data[key]
 
 
 class RouteInline(admin.TabularInline):
     model=Route
     extra= 2
-    fk_name='destination'   # to dissociate the foreignkeys
+    fk_name='departure'   # to dissociate the foreignkeys
 
 class StopInline(admin.TabularInline):
     model=Stop
@@ -69,10 +74,10 @@ class StationAdmin(admin.ModelAdmin):
 
 class StopAdmin(admin.ModelAdmin):
     fieldsets = [ (None,{'fields':['name']}),
-                 ('GPS-Info',{'fields':['location'],'classes':['collapse']}),
+                 ('GPS-Info',{'fields':['gpsLocation'],'classes':['collapse']}),
           
                 ]
-    list_display = ['name','location']
+    list_display = ['name','gpsLocation']
     list_filter = ['name']
     search_fields = ['name']
 
@@ -82,11 +87,15 @@ class StopAdmin(admin.ModelAdmin):
 
 class RouteAdmin(admin.ModelAdmin):
     fieldsets = [ ('Cost',{'fields':['fare']}),
-                 ('stations',{'fields':['destination','arrival']}),
+                 ('stations',{'fields':['departure','arrival']}),
+                  
                 ]
-    list_display = ['destination','arrival','fare']
-    list_filter = ['arrival','destination']
+    list_display = ['departure','arrival','fare','total_distance']
+    list_filter = ['arrival','departure']
     
+class Route_stopAdmin(admin.ModelAdmin):
+    list_display = ['stop','route','order','accumulated_distance']
+    list_filter = ['route','order']
     
     
 
@@ -108,5 +117,5 @@ class ZipCode(models.Model):
 admin.site.register(Station, StationAdmin)
 admin.site.register(Stop,StopAdmin)
 admin.site.register(Route,RouteAdmin)
-admin.site.register(Route_stop)
+admin.site.register(Route_stop,Route_stopAdmin)
 admin.site.register(ZipCode)
