@@ -1,0 +1,16 @@
+{% extends 'poll/base.html' %}
+
+{%block content%}
+<h3>{{p.question}}</h3>
+
+<ul>
+{% for c in p.choice_set.all %}
+    <li>{{ c.choice }} -- {{ c.votes }} vote{{ c.votes|pluralize }}</li>
+{% endfor %}
+</ul>
+
+<a href="/poll/{{ p.id }}/">Vote again?</a> <br>
+<a href="/poll/" >Return poll index page</a>
+
+
+{%endblock %}

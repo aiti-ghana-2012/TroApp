@@ -1,0 +1,23 @@
+{% extends 'trotro/base.html'%}
+
+{% block content %}
+
+this is the welcome page
+
+
+<p>
+<center>
+<form method="POST" action="/trotro/detail/">
+from : <br>
+<label for="dest"> Destination </label>
+<input type="text" name="destination" id="dest"/> 
+<br> <br>
+<center>To :</center> 
+<br>
+<label for="arriv"> Arrival </label>
+<input type="text" name="arrival" id="arriv" /> <br><br>
+<input type="reset" value="reset" /> <input type="submit" value="submit" />
+</form>
+ </center>
+</p>
+{% endblock%}

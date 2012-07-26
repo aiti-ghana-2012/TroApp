@@ -1,0 +1,15 @@
+{% extends 'list/base.html' %}
+
+{% block content %}
+<table summary="" align="center" border="2" >
+<tr><th>Post title</th><th> created </th> <th>last updated</th><th>Body</th></tr>
+{%for p in post_list%}
+
+<tr><td><h2> <a href="/blog/full/p.id" >{{p.title}}</a></h2></td><td>{{p.created}}</td><td>{{p.updated}}</td><td> {{p.body}}</td></tr>
+	
+{% endfor %}
+</table>
+
+
+{% endblock %}
+

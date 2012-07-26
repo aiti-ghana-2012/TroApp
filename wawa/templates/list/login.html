@@ -1,0 +1,18 @@
+
+{% extends "list/base.html" %}
+
+{% block content %}
+they aeh  
+{%if user.is_authenticated %}
+<h2>You have are already logged in.</h2>
+<a href='/list/logout'>logout</a>
+
+{%else%}
+<h3>new user login below</h3>
+<form action="/blog/posts/" method="post">
+     {{ form.as_p }}
+     <input type="submit" value="Submit" value="Login!" />
+  </form>
+
+{%endif%}
+{% endblock %}

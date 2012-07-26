@@ -1,0 +1,21 @@
+<html>
+<head>
+<title>The trotro application</title>
+</head>
+<body>
+<marquee>You are live on the TroTroApp</marquee>
+<br>
+<p>
+<form method="POST" action="/trotro/search/"> 
+<label for="search"> Search here: </label>
+<input type="text" name="search" id="search" /> <input type="submit" value="Enter" />
+</form>
+</p>
+
+
+{% block content %}
+
+
+{% endblock%}
+</body>
+</html>

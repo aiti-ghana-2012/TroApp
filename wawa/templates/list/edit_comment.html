@@ -1,0 +1,12 @@
+{% extends 'list/base.html'%}
+
+{%block content%}
+<h3>New comment:</h3>
+<div>
+<form method='POST' action="/blog/comments/{{pid.id}}/edit/">
+
+{{ form.as_p }} 
+<input type='submit' name='Submit'>
+</form>
+</div>  
+{%endblock%}

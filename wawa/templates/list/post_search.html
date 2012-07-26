@@ -1,0 +1,15 @@
+{% extends "list/base.html"%}
+
+{%block content%}
+
+{{term}}
+
+{%for i in postser%}
+
+<a href="/blog/posts/{{i.id}}">
+<h1>{{i}}</h1>
+</a>   
+        
+{%endfor%}
+{%endblock%}
+

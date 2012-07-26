@@ -1,0 +1,11 @@
+{% extends "reg/base.html" %}
+
+{%block content%}
+<h1>Create an Account with pilas</h1>
+
+<form action="/poll/account/logpage/" method="POST" > 
+  {{form.as_p}}
+  <input type="submit" value="create account" />
+</form>
+
+{%endblock%}

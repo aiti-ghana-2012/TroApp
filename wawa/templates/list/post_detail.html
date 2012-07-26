@@ -1,0 +1,51 @@
+{% extends 'list/base.html'%}
+
+{% block content %}
+
+
+<h2>
+<a href="/blog/posts/{{ pid }}"><!-- this is the worst, but simplest way to link to the specific post.
+Read the document mentioned in the instructions for more info-->
+{{ pid.title }}
+</a>
+</h2>
+
+<ul>
+<li>
+Created: {{ pid.created }}
+</li>
+
+<li>
+Last updated: {{ pid.updated }}
+</li>
+
+<li>
+{{ pid.body }} <!-- replace body_first_60 with whatever you called your
+method to get the first 60 characters of the body!-->
+</li>
+</ul>
+
+<table summary="" align="center" border="2" bgcolor="purple" >
+<tr><th>Author</th><th>comment</th><th>created date</th><th>Last update</th><th>Editor option</th></tr>
+{%for c in relation%}
+   <tr><td>{{c.author}}</td><td>{{c.body}}</td><td>{{c.created}}</td><td>{{c.updated}}</td> <td><a href="/blog/comments/{{ c.id }}/edit">
+Edit Comment
+</a></td></tr>  
+
+{%endfor%}
+</table>
+
+
+
+
+
+
+<h3>New comment:</h3>
+<div>
+<form method='post' action="">
+{{ form.as_ul}}
+<input type='submit' name='Submit'>
+</form>
+</div>  
+
+{% endblock %}

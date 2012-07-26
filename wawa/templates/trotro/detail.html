@@ -1,0 +1,41 @@
+{% extends 'trotro/base.html'%}
+
+{% block content %}
+<center>
+from {{departure}} to {{arrival}} <br>
+<center>FARE = GH {{cost}} </center>
+<table summary="" cellpadding="5" border="2" cellspacing="5" >
+
+<tr> <th> route(1) </th> <th> route(2) </th> </tr> <!-- a for loop operation for number of route -->
+
+<tr bgcolor="blue"> <td> station(1) </td> <td> station(1) </td></tr> <!-- for loop above ends here-->
+
+<tr> <td> stop_id 1 </td> <td> stop_id 1 </td> </tr>  <!-- for loop to print stops on route-->
+<tr> <td> stop_id 2 </td> <td> stop_id 2 </td> </tr>  <!-- for loop to print stops on route-->
+
+<tr bgcolor="blue"> <td> station(2) </td> <td> station(2) </td></tr>  <!-- for loop to print arrival station--> 
+
+</table>
+
+<br>
+
+{{arrival}}
+{{departure}}
+{{stop_list_post}}
+
+<br>
+
+
+
+<form action="/trotro/map/" method="POST">
+
+<label for="yes">check the box and confirm to view the map: </label>
+<input type="checkbox" name="map" id="yes" /> 
+<br>
+<input type="submit" value="confirm" />
+</form>
+
+</center>
+
+
+{% endblock %}

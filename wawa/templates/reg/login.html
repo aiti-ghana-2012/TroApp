@@ -1,0 +1,15 @@
+
+{% extends "reg/base.html" %}
+
+{% block content %}
+
+{%if user.is_authenticated %}
+<p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+<a href='/reg/logout'>logout</a>
+
+{%else%}
+<h3>new user login below</h3>
+<a href="/poll/account/my_view/" >click to login</a>
+{%endif%}
+
+{% endblock %}
