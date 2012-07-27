@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib import admin
 #from django.newforms import FormField 
 import datetime
+from django import forms
 
 class Station(models.Model):
     name = models.CharField(max_length=200)
@@ -14,7 +15,7 @@ class Station(models.Model):
 
 
 class Route(models.Model):
-    fare = models.IntegerField()
+    fare = models.FloatField()
     departure = models.ForeignKey(Station, related_name='destination')
     arrival = models.ForeignKey(Station, related_name='arrival')
     total_distance = models.FloatField(default = 0)
@@ -22,6 +23,7 @@ class Route(models.Model):
     def __unicode__(self):
         router = str(self.departure) + ' - ' + str(self.arrival)
         return router 
+
 
 class Stop(models.Model):
     name = models.CharField(max_length=200)
@@ -37,6 +39,7 @@ class Route_stop(models.Model):
     stop = models.ForeignKey(Stop)
     order = models.IntegerField()
     accumulated_distance=models.FloatField( default = 0)
+    stop_fare = models.FloatField( default = 0 )
     
 
     def __unicode__(self):
