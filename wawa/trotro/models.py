@@ -28,6 +28,7 @@ class Route(models.Model):
 class Stop(models.Model):
     name = models.CharField(max_length=200)
     gpsLocation = models.CharField(max_length=50, default= '')
+    accumulated_distance=models.FloatField( default = 0)
     
 
     def __unicode__(self):
@@ -80,7 +81,7 @@ class StopAdmin(admin.ModelAdmin):
                  ('GPS-Info',{'fields':['gpsLocation'],'classes':['collapse']}),
           
                 ]
-    list_display = ['name','gpsLocation']
+    list_display = ['name','gpsLocation','accumulated_distance']
     list_filter = ['name']
     search_fields = ['name']
 
@@ -97,7 +98,7 @@ class RouteAdmin(admin.ModelAdmin):
     list_filter = ['arrival','departure']
     
 class Route_stopAdmin(admin.ModelAdmin):
-    list_display = ['stop','route','order','accumulated_distance']
+    list_display = ['stop','route','order','accumulated_distance','stop_fare']
     list_filter = ['route','order']
     
     

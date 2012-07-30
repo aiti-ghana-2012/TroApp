@@ -1,24 +1,29 @@
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'wawa.settings'
+
 from pygraph.classes import digraph
 from pygraph.algorithms.minmax import shortest_path
 
 
-from models import Route, RouteStop, Station, Stop
+from trotro.models import Route, Route_stop, Station, Stop
+
 
 
 def pesewa_weight_function(route):
-	return route.cost
+	  return route.fare 
+
+
 
 def route_arriving_stop_weight_function(stop, route):
-	return (stop.accumlated_distance/route.total_distance) * route.cost
+	return (stop.accumulated_distance/route.total_distance) * route.fare
 
 def route_departing_stop_weight_function(stop, route):
-	return route.cost - route_arriving_stop_weight_function(stop, route)
+	return route.fare - route_arriving_stop_weight_function(stop, route)
 
 def get_trograph(weight_function):
 	trograph = digraph.digraph()
-	
 	allRoutes = Route.objects.all()
-	allStations = Staion.objects.all()
+	allStations = Station.objects.all()
 	
 	for station in allStations:
 		trograph.add_node(station.id)
@@ -31,6 +36,7 @@ def get_trograph(weight_function):
 		)
 
 	return trograph
+
 
 def path(start, end):
 
@@ -45,10 +51,10 @@ def path(start, end):
 		root = "stop:%i" % start.id
 		trograph.add_node(root)
 		
-		included_routes = Route.objects.filter(route_stop__id=start.id)
-		for route in included_routes:
+		start_included_routes = Route.objects.filter(stops__id=start.id)
+		for route in start_included_routes:
 			trograph.add_edge(
-				(root, route.arrival),
+				(root, route.arrival.id),
 				wt = route_departing_stop_weight_function(start, route),
 				label = route,
 			)
@@ -61,14 +67,53 @@ def path(start, end):
 		end_node = "stop:%i" % end.id
 		trograph.add_node(end_node)
 		
-		included_routes = Route.objects.fileter(route_stop__id=end.id)
-		for route in included_routes:
+		stop_included_routes = Route.objects.filter(stops__id=end.id)
+		for route in stop_included_routes:
 			trograph.add_edge(
-				(route.departure, end_node),
+				(route.departure.id, end_node),
 				wt = route_arriving_stop_weight_function(end, route),
 				label = route,			
 			)
 
+        #checking for same route start and stop
+        routes = {}
+        start_included_routes = Route.objects.filter(stops__id=start.id)
+        for route in start_included_routes:
+            routes[route] = 1
+
+        stop_included_routes = Route.objects.filter(stops__id=end.id)
+        for route in stop_included_routes:
+            if route in routes:
+                routes[route] += 1
+
+        duplicated_routes = [route for route, count in routes.items() if count == 2]
+
+        if duplicated_routes:
+            if len(duplicated_routes) == 1:
+                return duplicated_routes
+            
+            smallest_distance = None
+            best_route = None
+
+            for route in duplicated_routes:
+
+                start_route_stop = route.stops.get(stop=start)
+                stop_route_stop = route.stops.get(stop=end)
+
+                distance = stop_route_stop - start_route_stop
+
+                if distance < 0:
+                    continue
+
+                if smallest_distance is None or distance < smallest_distance:
+                    smallest_distance = distance
+                    best_route = route
+
+            if best_route is None:
+                raise ValueError("No positive distance route from %s to %s... weird." % str(start), str(end))
+            else:
+                return [best_route]
+        
 	#ok i have now fully transformed the graph
 
 	#djisktra!
@@ -82,10 +127,11 @@ def path(start, end):
 	routes = []
 	
 	current = end_node
+	
 
 	while spanning_tree[current] is not None:
 		previous = spanning_tree[current]
-		routes.append(trograph.edge_label((previous,current))
+		routes.append(trograph.edge_label((previous,current)))
 		current = previous
 
 	return routes[::-1]
@@ -98,9 +144,7 @@ def routes_to_messages(routes, start, end):
 	if isinstance(start, Stop):
 		embark_message = "At %s, get on a TroTro heading towards %s station"
 		first_route = routes.pop(0)
-		embark_message = embark_messages % 
-			(start.name, first_route.arrival.name)
-	
+		embark_message = embark_message % (start.name, first_route.arrival.name)
 		messages.append(embark_message)
 
 	for route in routes:
@@ -115,13 +159,12 @@ def routes_to_messages(routes, start, end):
 		else:
 			the_route = first_route
 
-		route_stop = RouteStop.objects.filter(
-			route=routes[-1],
+		route_stop = Route_stop.objects.filter(
+			route=the_route,
 			stop=end,
 		)[0]
 		
-		message = "Get off at %s, stop number %i" %
-			(end.name, route_stop.order)
+		message = "Get off at %s, stop number %i" %(end.name, route_stop.order)
 
 		messages.append(message)
 
