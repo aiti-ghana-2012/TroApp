@@ -1,0 +1,225 @@
+<html>
+<head>
+<title>the world in my palm</title>
+<link href="master.css" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+
+ function fvalidator(form)
+ {
+   var vname=/^([A-Za-z]{1,10})(\-)?(\s)?([A-Za-z]{1,10})?$/;
+   var vpass = /^[3]+$/;
+   var errors=[];    
+    
+    var cname= form.name.value;
+    var cpass =form.pword.value;
+    
+    if(!vname.test(cname))
+    errors[errors.length]="invalid username\n";
+    
+     if(!vpass.test(cpass))
+    errors[errors.length]="invalid password\n";
+ 
+ 
+     if(errors.length>0)
+   {
+     reportErrors(errors);
+     return false;
+     
+   }      
+ 
+ return true;
+ }
+
+function reportErrors(errors)
+{
+ var msg = "invalid input found in: \n"; 
+for(var i=0; i<errors.length; i++) 
+{
+  var numErrors= i+1;
+  msg += + "\n" + numErrors + ". " + errors[i] ;
+}
+
+alert(msg)
+}
+
+
+
+
+
+
+
+</script>
+
+<script type="text/javascript" >
+
+
+function f2c()
+{
+  var faren= parseFloat(document.cal.farh.value);
+  
+  var cels = Math.round(((faren-32)*(5/9)+273.16)*100)/100;
+  document.cal.celcius.value= cels;
+}
+
+
+function mathworks()
+{
+  var val= parseFloat(document.matter.val.value);
+  var output= Math.round(Math.sin(val*Math.PI/180)*100)/100; 
+  document.matter.view.value = output; 
+}
+
+
+
+function mathworkc()
+{
+  var val= parseFloat(document.matter.val.value);
+  var output= Math.round(Math.cos(val*Math.PI/180)*100)/100;
+  document.matter.view.value = output; 
+}
+
+
+function mathworkt()
+{
+  var val= parseFloat(document.matter.val.value);
+  var output= Math.round(Math.tan(val*Math.PI/180)*100)/100; 
+  
+  document.matter.view.value = output; 
+}
+
+
+</script>
+
+
+
+</head>
+<body>
+
+<div id="wrapper">
+
+<div id="header">
+<center> <h3>the will for the works in laboramy</h3> </center>
+
+</div>
+
+
+<div id="content">
+<div id="lhs">
+<center>
+<h3> temp converter</h3> 
+<form name="cal">
+<label for="far">farenhiet</label> <br>
+<input type="text" name="farh" size="4" id="far" onkeyup="f2c()" />
+<br><br>
+<label for="cel">celcius</label> <br>
+<input type="text" name="celcius" size="4" id="cel" />
+</form>
+</center>
+</div>
+
+
+
+<div id="rhs">
+<center>
+<h3>mathwork</h3>
+<table summary="" >
+<form name="matter">
+
+<tr><td>
+<label for="val">value</label>
+</td><td>
+<input type="text" name="val" id="val" size="5" />
+</td></tr>
+<tr><td>
+<label for="sin">sin</label>
+<input type="radio" name="trig" id="sin" onclick="mathworks()" /> 
+</td>
+<td>
+<label for="cos">cos</label>
+<input type="radio" name="trig" id="cos" onclick="mathworkc()" /> 
+</td>
+</tr>
+<tr><td>
+<label for="tan">tan</label>
+<input type="radio" name="trig" id="tan" onclick="mathworkt()" /> 
+</td></tr>
+<tr><td>
+Answer
+</td>
+<td>
+<input type="text" name="view" id="out" size="6" readonly="yes" /> 
+</td></tr>
+</form>
+</table>
+</center>
+</div>
+
+
+<div id="center">
+
+<table summary="" align="center" cellpadding="10px" cellspacing="5px" border="1px" bgcolor="white" >
+<form action="thephp.php" onsubmit="return fvalidator(this)" method="post" name="former" >
+<tr>
+<td>
+<label for="user">username</label>
+<input type="text" name="name" size="10" id="user" />
+</td>
+<td>
+<label for="pass">password</label>
+<input type="password" name="pword" id="pass"/>
+</td>
+</tr>
+<tr><td align="center"><input type="reset" value="refresh" /></td>
+    <td align="center"> <input type="submit" value="sign in" /></td>
+</tr>
+</form>
+</table>
+
+</div>
+
+
+
+
+
+
+<div id="nav">
+<center>
+<a href="index.html" >home</a> | store |  
+</center>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div id="footer">
+
+foot
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+</body>
+</html>

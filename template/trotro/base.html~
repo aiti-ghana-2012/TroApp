@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>The trotro application</title>
+<link type="text/css" rel="stylesheet" href="css/bootstrap.css"/>
+</head>
+<body>
+<marquee>You are live on the TroTroApp</marquee>
+<br>
+<p>
+
+<script src="js/bootstrap.js" ></script>
+
+<form method="POST" action="/trotro/search/" class="well"> 
+<label for="search"> Search here: </label>
+<input type="text" name="search" id="search" class="span3" /> <input type="submit" value="Enter" />
+</form>
+</p>
+
+
+{% block content %}
+<script src="js/bootstrap.js" ></script>
+
+{% endblock%}
+</body>
+</html>

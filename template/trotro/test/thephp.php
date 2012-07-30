@@ -1,0 +1,39 @@
+<?php
+
+echo "form recieved today:". date('d/m/Y') . "<br> at this time: ". time();  
+
+echo "<br>";
+
+$name = $_POST['name'];
+$pass = $_POST['pword'];
+
+$conn = mysql_connect($server = 'localhost', $username = 'root', $password = '1234') or die(mysql_error());
+echo "connected to db <br>";
+
+$sel = mysql_select_db('tester') or die(mysql_error());
+echo "database selected";
+
+$query = "INSERT INTO `tester`.`madam` (`name` ,`pass`) values ('$name',$pass )";
+
+$result = mysql_query($query) or die(mysql_error());
+echo "query inserted<br>";
+
+if(isset($_POST['see']))
+ {
+
+$query = "SELECT * FROM `madam` ";
+$result = mysql_query($query);
+echo "<table> <tr><th>name</th><th>password</th></tr> ";
+ while( $row= mysql_fetch_array($result))
+ {
+ echo "<tr><td>";  
+  echo   $row['name'];
+  echo "</td><td>";
+  echo $row['pass'];
+  echo "</td></tr>"; 
+ }
+  echo "</table>";
+
+}
+
+?>

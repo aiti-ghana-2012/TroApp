@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100%; margin-top: 200px; text-align: center; margin-left: 200px; }
+      #wen { margin-top: 20px; text-align: center; margin-left: 20px;    }
+    </style>
+
+	<link href="master.css" type="text/css" rel="stylesheet" />    
+    
+    <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCWpTBw2VmseOdqrLMWli5JiWWElsIbXYo&sensor=true&region=GH">
+    </script>
+    <script type="text/javascript">
+
+var map;
+      var directionDisplay;
+      var directionsService;
+      var stepDisplay;
+      var markerArray = [];
+
+      function initialize() {
+        // Instantiate a directions service.
+        directionsService = new google.maps.DirectionsService();
+
+        // Create a map and center it on Manhattan.
+        var manhattan = new google.maps.LatLng(5.6045400000000001, -0.17802000000000001);
+        var mapOptions = {
+          zoom: 15,
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          center: manhattan
+        }
+        map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+
+        // Create a renderer for directions and bind it to the map.
+        var rendererOptions = {
+          map: map
+        }
+        directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions)
+
+        // Instantiate an info window to hold step text.
+        stepDisplay = new google.maps.InfoWindow();
+      }
+
+      function calcRoute() {
+
+        // First, remove any existing markers from the map.
+        for (i = 0; i < markerArray.length; i++) {
+          markerArray[i].setMap(null);
+        }
+
+        // Now, clear the array itself.
+        markerArray = [];
+
+        // Retrieve the start and end locations and create
+        // a DirectionsRequest using WALKING directions.
+        var start = document.getElementById('start').value;
+        var end = document.getElementById('end').value;
+        var request = {
+            origin: start,
+            destination: end,
+            travelMode: google.maps.DirectionsTravelMode.DRIVING
+        };
+
+        // Route the directions and pass the response to a
+        // function to create markers for each step.
+        directionsService.route(request, function(response, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            var warnings = document.getElementById('warnings_panel');
+            warnings.innerHTML = '<b>' + response.routes[0].warnings + '</b>';
+            directionsDisplay.setDirections(response);
+            showSteps(response);
+          }
+        });
+      }
+
+      function showSteps(directionResult) {
+        // For each step, place a marker, and add the text to the marker's
+        // info window. Also attach the marker to an array so we
+        // can keep track of it and remove it when calculating new
+        // routes.
+        var myRoute = directionResult.routes[0].legs[0];
+
+        for (var i = 0; i < myRoute.steps.length; i++) {
+          var marker = new google.maps.Marker({
+            position: myRoute.steps[i].start_point,
+            map: map
+          });
+          attachInstructionText(marker, myRoute.steps[i].instructions);
+          markerArray[i] = marker;
+        }
+      }
+
+      function attachInstructionText(marker, text) {
+        google.maps.event.addListener(marker, 'click', function() {
+          // Open an info window when the marker is clicked on,
+          // containing the text of the step.
+          stepDisplay.setContent(text);
+          stepDisplay.open(map, marker);
+        });
+      }
+
+
+			
+    </script>
+  </head>
+<body onload="initialize()">
+ 
+
+<center> your selection is on this Trotro route : {{start}} to {{end}} <br><br>
+       trotro fare  is : {{cost}} <br><br>
+       
+       navigation information :  {{route_to_use}}, {{stop_to_seek}} <br><br>
+       
+      <table summary="" >
+       
+   
+
+<tr bgcolor="blue"> <td> {{departure}} </td></tr> <!-- for loop above ends here-->
+<tr>  
+  {% for stopper in stop_list %}
+ <td> {{stopper}} </td></tr>  <!-- for loop to print stops on route-->
+  
+  {%endfor%}
+<tr bgcolor="blue"> <td> {{arrival}} </td></tr>  <!-- for loop to print arrival station--> 
+
+
+		</table>
+      
+</center>
+
+
+
+ <!--  <tr>
+{% for i in route_count_post %}
+<th> route{{ forloop.counter }} </th> </tr> <!-- a for loop operation for number of route -->  -->
+
+
+
+
+<br>
+{{latlng_list}}
+
+<br>
+{{stop_list}}
+<br><br><br>
+
+
+<div style="text-align:center">
+    <b>Start: </b>
+    <select id="start">
+      <option value="5.6045400000000001, -0.17802000000000001">airport</option>
+      <option value="5.6633909999999998, -0.17794099999999999">Presec</option>
+
+      <option value="5.6492979999999999, -0.179143"> legon </option>
+      <option value="5.6417820000000001, -0.178199"> Okponglo </option>
+      <option value="5.5917899999999996, -0.18104200000000001"> 37-station </option>
+    </select>
+    <b>End: </b>
+    <select id="end" onchange="calcRoute();">
+      <option value="5.666893, -0.177512">atomic</option>
+
+      <option value="5.6045400000000001, -0.17802000000000001"> airport </option>
+      <option value="5.6207269999999996, -0.17660400000000001">spanner </option>
+      <option value="5.6492979999999999, -0.179143"> legon </option>
+      <option value="5.6417820000000001, -0.178199"> okponglo </option>
+      <option value="5.679192,-0.17154">madina</option>
+    </select>
+
+    </div>
+    <div id="map_canvas" style="width:50%; height:50%"></div>
+    &nbsp;
+    <div id="warnings_panel" style="width:100%;height:10%;text-align:center"></div>
+
+
+
+
+</table>
+<marquee>programmed by massive apexing technology group</marquee> 
+     
+  </body>
+</html>
