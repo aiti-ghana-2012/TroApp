@@ -1,0 +1,19 @@
+{% extends 'poll/base.html' %}
+
+{%block content%}
+
+
+<table summary="" bgcolor="blue" title="poll links" cellpadding="5" cellspacing="5" >
+<form action="/poll/{{poll_id}}">
+
+<input type="submit" name="refresh" />
+</form>
+{%for i in five_polls%}
+ <ol> <tr><td> <a href="/poll/{{i.id}}"> {{i}}</a>  </td></tr>  </ol> 
+ {%endfor%}
+</table>
+
+
+
+
+{%endblock%}

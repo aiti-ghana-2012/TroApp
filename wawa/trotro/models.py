@@ -14,17 +14,6 @@ class Station(models.Model):
         return self.name 
 
 
-class Route(models.Model):
-    fare = models.FloatField()
-    departure = models.ForeignKey(Station, related_name='destination')
-    arrival = models.ForeignKey(Station, related_name='arrival')
-    total_distance = models.FloatField(default = 0)
-
-    def __unicode__(self):
-        router = str(self.departure) + ' - ' + str(self.arrival)
-        return router 
-
-
 class Stop(models.Model):
     name = models.CharField(max_length=200)
     gpsLocation = models.CharField(max_length=50, default= '')
@@ -34,6 +23,22 @@ class Stop(models.Model):
     def __unicode__(self):
         return self.name
 
+
+class Route(models.Model):
+    fare = models.FloatField()
+    departure = models.ForeignKey(Station, related_name='destination')
+    arrival = models.ForeignKey(Station, related_name='arrival')
+    total_distance = models.FloatField(default = 0)
+    via = models.CharField(max_length=100,default='none')
+    
+
+    def __unicode__(self):
+        router = str(self.departure) + ' - ' + str(self.arrival) + '( ' + str(self.via) + ')'
+        return router 
+
+
+
+
     
 class Route_stop(models.Model):
     route = models.ForeignKey(Route, related_name='stops')
@@ -41,6 +46,13 @@ class Route_stop(models.Model):
     order = models.IntegerField()
     accumulated_distance=models.FloatField( default = 0)
     stop_fare = models.FloatField( default = 0 )
+
+
+    
+    class Meta:
+	    
+	    ordering = ['route','order']
+    
     
 
     def __unicode__(self):
@@ -91,10 +103,10 @@ class StopAdmin(admin.ModelAdmin):
 
 class RouteAdmin(admin.ModelAdmin):
     fieldsets = [ ('Cost',{'fields':['fare']}),
-                 ('stations',{'fields':['departure','arrival']}),
+                 ('stations',{'fields':['departure','arrival','via']}),
                   
                 ]
-    list_display = ['departure','arrival','fare','total_distance']
+    list_display = ['departure','arrival','fare','total_distance','via']
     list_filter = ['arrival','departure']
     
 class Route_stopAdmin(admin.ModelAdmin):

@@ -1,0 +1,21 @@
+{% extends 'poll/base.html' %}
+
+{%block content%}
+
+<h1>{{ p.question }}</h1>
+
+{% if error_message %}
+<p><strong>{{ error_message }}</strong></p>
+{% endif %}
+
+<form action="/poll/{{ p.id }}/vote/" method="post">  
+
+{% for c in p.choice_set.all %}
+		
+    <input type="radio" name="choice" id="c{{ forloop.counter }}" value="{{ c.id }}" />
+    <label for="c{{ forloop.counter }}">{{ c.choice }}</label><br />
+{% endfor %}
+<input type="submit" value="Vote" />
+</form>
+
+{%endblock%}

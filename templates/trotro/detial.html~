@@ -1,0 +1,33 @@
+{% extends 'trotro/base.html'%}
+
+{% block content %}
+<center>
+from station(1) to station(2) <br>
+<center>FARE = GH ----  </center>
+<table summary="" >
+
+<tr> <th> route(1) </th> <th> route(2) </th> </tr> <!-- a for loop operation for number of route -->
+
+<tr> <td> station(1) </td> <td> station(1) </td></tr> <!-- for loop above ends here-->
+
+<tr> <td> stop_id 1 </td> <td> stop_id 1 </td> </tr>  <!-- for loop to print stops on route-->
+<tr> <td> stop_id 2 </td> <td> stop_id 2 </td> </tr>  <!-- for loop to print stops on route-->
+
+<tr> <td> station(2) </td> <td> station(2) </td></tr>  <!-- for loop to print arrival station--> 
+
+</table>
+
+
+<form action="" method="POST">
+<label for="yes">Yes</label>
+<input type="radio" name="map" id="yes" /> 
+<label for="no">No</label>
+<input type="radio" name="map" id="no" /> 
+<br>
+<input type="submit" value="confirm" />
+</form>
+
+</center>
+
+
+{% endblock %}

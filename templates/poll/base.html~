@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>The poll master</title>
+</head>
+<body>
+<center>
+<hr size="10" width="40" align="center" color='blue'> <br>
+<i><h3>THINK TWICE : SEE ME AND I SEE YOU</h3></i>
+</center>
+
+{% block content %}
+
+{%endblock%}
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+{% extends 'list/base.html' %}
+
+{% block content %}
+<center>  <h3> {{pid.title}}  </h3> </center>
+  <br>
+  <p>
+{{pid.body}}  
+  </p>
+<a href="/blog/posts/{{pid.id}}" >click to view detail of post with comments</a>
+{% endblock %}

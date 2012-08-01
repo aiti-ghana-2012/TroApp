@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100%; margin-top: 200px; text-align: center; margin-left: 200px; }
+      #wen { margin-top: 20px; text-align: center; margin-left: 20px;    }
+    </style>
+		<script src="my.js"></script> 
+     
+	<link href="master.css" type="text/css" rel="stylesheet" />    
+    
+    
+      <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCWpTBw2VmseOdqrLMWli5JiWWElsIbXYo&sensor=true&region=GH">
+    </script>
+   
+   
+	    
+	 <script src="googlemap.js"></script>
+	   
+  </head>
+<body>
+ 
+
+
+<input type="button" onclick="popup()" value="Click Me!"> 
+ 
+
+<center> your selection is on this Trotro route : {{departure}} to {{arrival}} <br><br>
+       trotro fare  is : {{cost}} <br><br>
+       
+       navigation information :  <br>
+			{%for message in info%}
+			option{{forloop.counter}} ---- {{message}}<br>
+			{%endfor%}       
+      Our advice is to : {{advice}}       
+       
+       
+       <br><br>
+       
+</center>
+
+ {% if size_of_list < 8 %}
+ <table summary="" border="5" >  
+<tr> 
+ {%for label in demo_list%}
+
+<th bgcolor="red"> {{ label}}  </th> 
+{%endfor%}
+</tr> <tr>
+  {% for stopper in stop_list %}
+    <td colspan={{ demo_list|length }}>
+   
+  	   {%for i in stopper%}
+  <tr><td> {{i}} </td></tr>  <!-- for loop to print stops on route-->
+   
+      {%endfor%}
+      </td>
+	
+  {%endfor%}
+  </tr>
+ </table>  
+ 
+  {%endif%}
+  
+  {% if size_of_list > 8 %}
+  <table summary="" cellpadding="2" border="5" >
+   <tr><th bgcolor="red"> route  </th></tr>	
+    	   {%for i in stop_list %}
+    	  
+   	    <tr><td>{{i}}</td></tr>
+   	
+      {%endfor%} 
+      </table>     
+ {%endif%}
+		
+      
+
+
+
+
+
+
+<br>
+{{latlng_list}}
+
+<br>
+
+<br><br><br>
+
+
+<div style="text-align:center">
+    <b>Start: </b>
+    <select id="start">
+      <option value="5.6045400000000001, -0.17802000000000001">airport</option>
+      <option value="5.6633909999999998, -0.17794099999999999">Presec</option>
+
+      <option value="5.6492979999999999, -0.179143"> legon </option>
+      <option value="5.6417820000000001, -0.178199"> Okponglo </option>
+      <option value="5.5917899999999996, -0.18104200000000001"> 37-station </option>
+    </select>
+    <b>End: </b>
+    <select id="end" onchange="calcRoute();">
+      <option value="5.666893, -0.177512">atomic</option>
+
+      <option value="5.6045400000000001, -0.17802000000000001"> airport </option>
+      <option value="5.6207269999999996, -0.17660400000000001">spanner </option>
+      <option value="5.6492979999999999, -0.179143"> legon </option>
+      <option value="5.6417820000000001, -0.178199"> okponglo </option>
+      <option value="5.679192,-0.17154">madina</option>
+    </select>
+
+    </div>
+    <div id="map_canvas" style="width:50%; height:50%"></div>
+    &nbsp;
+    <div id="warnings_panel" style="width:100%;height:10%;text-align:center"></div>
+
+
+
+
+</table>
+<marquee>programmed by massive apexing technology group</marquee> 
+     
+  </body>
+</html>

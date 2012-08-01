@@ -1,0 +1,127 @@
+<html>
+<head>
+<title> hospital </title>
+<script type="text/javascript" >
+var vname=/^([A-Za-z]{1,10})?(\-)?(\s)?([A-Za-z]{1,10})?$/;
+var vdob=/^\d{2}/\d{2}/\d{4}/;
+
+
+function hostpitform(form)
+{
+ 
+ var aname=form.sname.value;
+ var adob=form.dob.value;
+
+   var errors=[];
+
+if (!vname.test(aname)) {
+  errors[errors.length] = "You must enter a valid name.";
+}
+if (!vdob.test(adob)) {
+  errors[errors.length] = "You must enter a valid date of birth.";
+
+ }
+
+
+if (errors.length > 0) {
+  reportErrors(errors);
+  return false;
+ }
+ 
+ return true;
+}
+
+
+function reportErrors(errors){
+ var msg = "There were some problems...\n";
+ for (var i = 0; i<errors.length; i++) {
+  var numError = i + 1;
+  msg += "\n" + numError + ". " + errors[i];
+ }
+ alert(msg);
+	
+	
+	
+}
+
+</script>
+
+</head>
+<body>
+<body >
+<h1> Legon Hospital Patient form </h1>
+<form onsubmit="return hostpitform(this)" method="post"  action="authentic.php">
+<caption align = "center"> PATIENT INFORMATION </caption>
+<table border = "4">
+<tr>
+<th>PATIENT NAME :<input type="radio" /> Mr.<input type="radio" />Ms. <input type="radio" />Mrs. <input type="text" name="sname" size="50"/> </th>
+<th> SEX : <input type="radio" /> M <input type="radio" /> F </th>
+<tr>
+<th> HEALTH INSURANCE SCHEME(HIS) / STUDENT # <input type="text" name="id"/> </th> <th>BIRTH DATE</th><td>(DD/MM/YY)  <input type ="text" name="dob" size="10"> </td>
+<tr>
+<th>PHONE NUMBER   (HOME)<input type="text" size="50"/></th><td>(WORK)<input type="text" size="40"/>EXT<input type="text" size ="2"/></td>
+<tr>
+<th> PREFERRED APPOINTMENT TIMES <input type="radio" /> Morning <input type="radio" /> Afternoon <input type="radio" />Evening</th> 
+<td><input type="radio" />Mon <input type="radio" /> Tue <input type="radio" />Wed <input type="radio" /> Thu <input type="radio" /> Fri <input type="radio" /> Sat</td>
+<tr>
+<th> ADDRESS <input type="text" size="50"/> </th> <th> CITY <input type="text"/> </th> <th> REGION <input type="text"/> </th>
+<tr> 
+</table><br/>
+
+<caption>HEALTH INFORMATION </caption> <br/>
+<table >
+<tr>
+<th>DATE OF LAST DENTAL VISIT <input type="text" name="sdate"/></th> <td>REASONS FOR YOUR VISIT <input type="text" size="50"/></td>
+<tr> 
+</table><br/>
+HAVE YOU EVER HAD ANY OF THE FOLLOWING DISEASES (PLEASE SELECT):
+<table cellpadding="30">
+<tr><td>
+<ul>
+
+<li> <input type="radio" />Asthma</li>
+<li> <input type="radio" />Diabetes</li>
+<li> <input type="radio" />Jaundice</li>
+<li> <input type="radio" />Epilepsy</li>
+<li> <input type="radio" />Hepatitis</li>
+</td>
+<td>
+<li> <input type="radio" />Dizziness</li>
+<li> <input type="radio" />Kidney Disease</li>
+<li> <input type="radio" />Tuberclosis</li>
+<li> <input type="radio" />Tumors</li>
+<li> <input type="radio" />Blood Disease</li>
+</td>
+<td>
+<li> <input type="radio" />Ulcers</li>
+<li> <input type="radio" />Veneral Diseases</li>
+<li> <input type="radio" />Penicillin Allergies</li>
+<li> <input type="radio" />Codaine Allergies</li>
+<li> <input type="radio" />Hay Fever</li>
+</ul></td></tr>
+ 
+
+
+</table><br/>
+HAVE YOU EVER HAD ANY COMPLICATIONS FOLLOWING TREATMENT  <input type="radio" />YES <input type="radio" /> NO (IF YES) EXPLAIN <input type="text" size="150" /> <br/>
+HAVE YOU EVER BEEN ADMITTED INTO A HOSPITAL <input type="radio" />YES <input type="radio" /> NO (IF YES) EXPLAIN <input type="text" size="100" /> <br/>
+ARE YOU UNDER THE CARE OF A PHYSICIAN <input type="radio" />YES <input type="radio" /> NO (IF YES) EXPLAIN <input type="text" size="100" /> <br/>
+NAME OF PHYSICIAN <input type= "text" name="physician" size="100"/>                      PHONE # <input type="text" / > <br/>
+DO YOU HAVE ANY HEALTH PROBLEMS THAT NEED FURTHER CLARIFICATIONS <input type="radio" />YES <input type="radio" /> NO (IF YES) EXPLAIN <input type="text" size="180" /> <br/><br/>
+
+
+IF YOU AGREE WITH THE ANSWERS YOU HAVE PROVIDED ABOVE CLICK ON "SUBMIT" OR CLICK ON "CANCEL" TO MAKE CHANGES. THANK YOU.<br/>
+<input type="submit" value="enter" />    <input type="reset" value="CANCEL" />
+
+
+
+
+
+
+
+
+
+
+</form>
+</body>
+</html>

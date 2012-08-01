@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render_to_response,get_object_or_404
 from trotro.models import *
-
+import sys
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
@@ -21,23 +23,103 @@ class RouteForm(forms.Form):
 
 def get_stops(depart,arrive):
         latlng_list = []
+	demo_list = []
 	stop_list=[]
         route_count_list =[]
 	route_count = 0
 	route_count_list = [route_count]
 	route_stop = Route_stop.objects.all()
 	route_call = Route.objects.all()
-	for route_index in range(0,len(route_call)):
-		if str(route_call[route_index].departure.name) == str(depart) and str(route_call[route_index].arrival.name) == str(arrive):
-			for i in range(0,len(route_stop)):
-				stop_list.append(str(route_stop[i].stop.name))
-
+	for i in range(0,len(route_stop)):
+		if str(route_stop[i].route.departure.name) == str(depart) and str(route_stop[i].route.arrival.name) == str(arrive):
+				#print 
+				#demo_list.append(str(route_stop[i].route))
+				#print demo_list
+				stop_list.append(str(route_stop[i].stop))
+			
 				raw_cord = str(route_stop[i].stop.gpsLocation)
 				raw_cord_split = raw_cord.split(',')
 				tuple_of_cord = (float(raw_cord_split[0]),float(raw_cord_split[1]))
 
         			latlng_list.append(tuple_of_cord)
-			return (stop_list,latlng_list)
+
+		elif str(route_stop[i].route.departure.name) == str(depart) and str(route_stop[i].stop.name) == str(arrive):
+				
+				#print route_stop[i].route
+				demo_list.append(str(route_stop[i].route))
+				#print demo_list
+				
+				stop_list = [[] for i in range(len(demo_list))]
+				#print demo_list
+				latlng_list = [[] for i in range(len(demo_list))]
+				for j in range(len(demo_list)):
+					for i in range(0,len(route_stop)): 
+		
+						ask= Route_stop.objects.all()
+			
+						if str(ask[i].route) == str(demo_list[j]):
+							marker=str(ask[i].stop)
+							stop_list[j].append(marker)
+							raw_cord = str(ask[i].stop.gpsLocation)	                             
+                                			raw_cord_split = raw_cord.split(',')
+							tuple_of_cord = (float(raw_cord_split[0]),float(raw_cord_split[1]))
+							latlng_list[j].append(tuple_of_cord)
+				
+				
+				
+		elif str(route_stop[i].stop.name) == str(depart) and str(route_stop[i].route.arrival.name) == str(arrive):
+				#print route_stop[i].route
+				demo_list.append(str(route_stop[i].route))
+				#print demo_list
+
+				stop_list = [[] for i in range(len(demo_list))]
+				#print demo_list
+	
+				for j in range(len(demo_list)):
+					for i in range(0,len(route_stop)): 
+		
+						ask= Route_stop.objects.all()
+			
+						if str(ask[i].route) == str(demo_list[j]):
+							marker=str(ask[i].stop)	                             
+                                			stop_list[j].append(marker)
+							raw_cord = str(ask[i].stop.gpsLocation)	                             
+                                			raw_cord_split = raw_cord.split(',')
+							tuple_of_cord = (float(raw_cord_split[0]),float(raw_cord_split[1]))
+							latlng_list[j].append(tuple_of_cord)
+
+				
+		elif str(route_stop[i].stop.name) == str(depart):
+				#print route_stop[i].route
+				demo_list.append(str(route_stop[i].route))
+				#print demo_list
+				
+				stop_list = [[] for i in range(len(demo_list))]
+				#print demo_list
+	
+				for j in range(len(demo_list)):
+					for i in range(0,len(route_stop)): 
+		
+						ask= Route_stop.objects.all()
+			
+						if str(ask[i].route) == str(demo_list[j]):
+							marker=str(ask[i].stop)	                             
+                                			stop_list[j].append(marker)
+							raw_cord = str(ask[i].stop.gpsLocation)	                             
+                                			raw_cord_split = raw_cord.split(',')
+							tuple_of_cord = (float(raw_cord_split[0]),float(raw_cord_split[1]))
+							latlng_list[j].append(tuple_of_cord)
+
+	
+	
+                                
+	if len(stop_list)>8:
+		return (stop_list,latlng_list,demo_list)
+			
+
+        return (stop_list,latlng_list,demo_list)
+
+
 
 
 
@@ -87,9 +169,9 @@ def information_function(departure,arrival):
                                         depart = route_call[route_index].route.departure.name
                                         arrive = route_call[route_index].route.arrival.name
 
-                                        stop_list,latlng_list=get_stops(depart,arrive)
+                                        stop_list,latlng_list,demo_list=get_stops(depart,arrive)
 
-                                        return (route,info,cost,stop_list,latlng_list)
+                                        return (route,info,cost,stop_list,latlng_list,demo_list)
 
                                                 
                                 #for station to stop                
@@ -99,11 +181,11 @@ def information_function(departure,arrival):
                                         cost = route_call[route_index].stop_fare
 
                                         depart = route_call[route_index].route.departure.name
-                                        arrive = route_call[route_index].route.arrival.name
+                                        arrive = route_call[route_index].stop.name
 
-                                        stop_list,latlng_list=get_stops(depart,arrive)
+                                        stop_list,latlng_list,demo_list=get_stops(depart,arrive)
 
-                                        return (route,info,cost,stop_list,latlng_list)
+                                        return (route,info,cost,stop_list,latlng_list,demo_list)
 
                                 #for stop to station
                                 if  str(route_call[route_index].stop.name) == str(departure) and str(route_call[route_index].route.arrival.name) == str(arrival):
@@ -121,12 +203,12 @@ def information_function(departure,arrival):
                                         inner = 'and from %s to %s is %s' %(route_call[route_index].route.departure.name,departure,stop_cost)
                                         cost = nothing + ' ' + tails + ' ' + inner
 
-                                        depart = route_call[route_index].route.departure.name
+                                        depart = route_call[route_index].stop.name
                                         arrive = route_call[route_index].route.arrival.name
 
-                                        stop_list,latlng_list=get_stops(depart,arrive)
+                                        stop_list,latlng_list,demo_list=get_stops(depart,arrive)
 
-                                        return (route,info,cost,stop_list,latlng_list)
+                                        return (route,info,cost,stop_list,latlng_list,demo_list)
 
 
 
@@ -145,12 +227,12 @@ def information_function(departure,arrival):
                                                 second_inner = 'and from %s to %s is %s ,' %(route_call[route_index].route.departure.name,arrival,second_stop_cost)
                                                 cost = nothing + ' ' + tails + ' ' + inner + ' ' +  second_inner
 
-                                                depart = route_call[route_index].route.departure.name
-                                                arrive = route_call[route_index].route.arrival.name
+                                                depart = route_call[route_index].stop.name
+                                                arrive = route_call[route_index_two].stop.name
 
-                                                stop_list,latlng_list=get_stops(depart,arrive)
+                                                stop_list,latlng_list,demo_list=get_stops(depart,arrive)
 
-                                                return (route,info,cost,stop_list,latlng_list)
+                                        	return (route,info,cost,stop_list,latlng_list,demo_list)
 
 
 
@@ -165,20 +247,15 @@ def search_route_stop(request):
 		if form.is_valid():
 			arrival = request.POST['arrival']			
 			departure = request.POST['destination']
-                        route,info,cost,stop_list,latlng_list=information_function(departure,arrival)
-			one = latlng_list[0]
-			two = latlng_list[1]
-
-			if len(info)>1:
-                                route_to_use = info[0]
-                                stop_to_seek = info[1]
-                        else:
-                                route_to_use = info[0]
-
-                        for path in range(len(route)):
-                                start = route[path].departure.name
-                                end = route[path].arrival.name
-              
+                        route,info,cost,stop_list,latlng_list,demo_list=information_function(departure,arrival)
+			#one = latlng_list[0]
+			#two = latlng_list[1]
+			size_of_list = len(stop_list)
+			size_of_info = len(info)                        
+              		advice = info[(len(info)-1)]
+			info = info[0:(len(info)-1)]
+			
+			print demo_list
                 else:
         		form = RouteForm() # An unbound form
                                 
